@@ -1,0 +1,126 @@
+execute pathogen#infect()
+
+syntax on
+filetype plugin indent on
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set backspace=indent,eol,start
+set fileformat=unix
+set grepprg=ag
+set scrolloff=3
+set guioptions="e"
+set novisualbell
+set visualbell t_vb=
+set cursorline
+set completeopt-=preview
+
+" persistent undo
+set undofile
+set undodir=~/.vim/dirs/undos
+
+"http://stackoverflow.com/a/15317146 for alternatives
+set nobackup
+set noswapfile
+
+set nocompatible
+set number
+set autoindent
+set hlsearch
+set incsearch
+set showmatch
+
+"TODO: understand each of the following options
+set smarttab
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+imap <D-v> ^O:set paste<Enter>^R+^O:set nopaste<Enter>
+
+nnoremap <F9> :make<CR>
+nnoremap <C-e>  :copen<CR>
+
+let mapleader = ","
+
+vnoremap <leader>e       "6yq:"6p
+
+nnoremap <C-t>           :CtrlPMRUFiles<CR><CR>
+nnoremap <space>         :noh<CR><CR>
+nnoremap <leader>e       :Ex<CR><CR>
+nnoremap <leader>-       :e#<CR><CR>
+vnoremap <leader>m       :'<,'>normal @m<CR>
+
+nnoremap <leader>vs      :sp ~/.vim/vimrc<CR><CR>
+nnoremap <leader>vv      :vsp ~/.vim/vimrc<CR><CR>
+nnoremap <leader>ve      :e ~/.vim/vimrc<CR><CR>
+nnoremap <leader>vq      :w<CR>:so %<CR>:q<CR> 
+
+" add directory jumps like these here
+nnoremap <leader>cdw     :Ex ~/work<CR><CR>
+nnoremap <leader>cd      :Ex ~/<CR><CR>
+
+nmap <leader>w    <c-w>
+nmap Y            y$
+
+autocmd FileType sh nnoremap <leader>r :!./%<CR><CR>
+autocmd FileType vim nnoremap <leader>r "6yy:@6<CR>
+
+autocmd BufEnter * silent! lcd %:p:h
+autocmd FileType gitcommit setlocal spell
+
+" :autocmd InsertEnter * set cul
+" :autocmd InsertLeave * set nocul
+
+" set proper syntax for weird extensions
+autocmd BufRead .jshintrc set syntax=json
+autocmd BufRead .jscsrc set syntax=json
+autocmd BufRead .tern-project set syntax=json
+autocmd BufRead .vimperatorrc set syntax=vim
+autocmd BufRead .user_bashrc set filetype=sh
+autocmd BufRead *.py nnoremap <F8> :!python %<CR>
+
+if has('gui_running')
+    colorscheme badwolf
+    set guifont=Monospace\ 12
+endif
+
+function! NewBash(f_name)
+    let full_name = "~/work/snippets/" . a:f_name
+    echo "Opening file: " . full_name
+    execute 'edit' full_name
+
+    let text = [ '#!/usr/bin/env bash', '' ]
+    let text = add(text, '# write your functions here')
+    let text = add(text, '')
+    let text = add(text, '# call sensitive function if -m switch present')
+    let text = add(text, 'if [[ $1 == "-m" ]]')
+    let text = add(text, 'then')
+    let text = add(text, 'fi')
+    let f = append(0, text)
+endfunction
+
+"""""" PLUGIN OPTIONS
+
+" CtrlP
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll)$',
+    \ }
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+" YCM
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_python_binary_path = '/home/ajinkya/miniconda3/bin/python'
+
+
+" Gundo
+let g:gundo_prefer_python3 = 1
+let $PATH = '/home/ajinkya/miniconda3/bin:' . $PATH
+
+
+" Tips and Tricks
+" gcc " for toggling comments
+" :read ! wc -l " for reading the ouptut of some shell command

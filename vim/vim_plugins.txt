@@ -1,0 +1,10 @@
+badwolf
+ctrlp.vim
+gundo.vim
+Spacegray.vim
+vim-commentary
+vim-fugitive
+vim-repeat
+vim-surround
+vim-syntax-extra
+YouCompleteMe

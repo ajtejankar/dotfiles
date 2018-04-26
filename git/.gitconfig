@@ -1,0 +1,6 @@
+[user]
+	email = tejankarajinkya@gmail.com
+	name = Ajinkya Tejankar
+[core]
+	autocrlf = false
+	eol = lf
